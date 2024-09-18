@@ -61,13 +61,23 @@ export default function Home() {
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    if (name === "price_willing_to_pay" && !isValidPrice(value) && value !== "")
-      return;
-
-    setBidData({ ...bidData, [name]: value });
+  
+    // If the element is an HTMLInputElement
+    if (e.target instanceof HTMLInputElement) {
+      if (name === "price_willing_to_pay" && !isValidPrice(value) && value !== "") {
+        return;
+      }
+      setBidData({ ...bidData, [name]: value });
+    }
+  
+    // If the element is an HTMLSelectElement
+    if (e.target instanceof HTMLSelectElement) {
+      setBidData({ ...bidData, [name]: value });
+    }
   };
+  
 
   const handleClick = async () => {
     setDataErrors({
